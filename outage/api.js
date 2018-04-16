@@ -1,0 +1,101 @@
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+const http = require('http');
+let fs = require('fs');
+var app = express();
+
+
+
+app.use('/orders/sell', (req, res) => {
+    console.log(req.query.page)
+    page = req.query.page;
+    importOutage('SELL', req.query.page).then((data) => {
+
+        res.send(data);
+    })
+
+});
+app.use('/orders/buy', (req, res) => {
+    console.log(req.query.page)
+    page = req.query.page;
+    importOutage('BUY', req.query.page).then((data) => {
+        res.send(data);
+    })
+});
+app.use('/orders/all', (req, res) => {
+    console.log(req.query.page)
+    page = req.query.page;
+    importOutage('ALL', req.query.page).then((data) => {
+
+        res.send(data);
+    })
+});
+
+app.use('/', (req, res) => {
+    importOutage().then((outageData) => {
+        res.send(outageData);
+    })
+});
+
+
+
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+const port = process.env.PORT || '3001';
+app.set('port', port);
+
+const server = http.createServer(app);
+
+server.listen(port, () => console.log(`API running on localhost:${port}`));
+
+var importOutage = (type, page) => {
+    return new Promise(function (resolve, reject) {
+        fs.readFile('../large-dataset.json', (err, data) => {
+            if (err) throw err;
+            outageRawData = JSON.parse(data);
+            outageRawData = outageRawData.orders;
+            if (type == "BUY") {
+                outageRawData = outageRawData.filter(value => value.type == 'BUY');
+            } else if (type == "SELL") {
+                outageRawData = outageRawData.filter(value => value.type == 'SELL');
+            }
+            outageRawData = outageRawData.sort((value1, value2) => {
+                tmp1 = new Date(value1.datetime);
+                tmp2 = new Date(value2.datetime)
+                if (tmp1 > tmp2) {
+                    return 1;
+                } else {
+                    return -1
+                }
+            })
+            numberPages = outageRawData.length / 10;
+            console.log(numberPages)
+            console.log(Math.ceil(numberPages))
+
+            numberPages = Math.ceil(outageRawData.length / 10);
+            var outageResultData = [];
+            if (page >= numberPages) {
+                resolve({ Error: 'Number of pages Exceeded' })
+            } else {
+                
+                var i = page * 10;
+                var max = page * 10 + 10
+                for (i; i < max; i++) {
+                    console.log(i)
+                    if (outageRawData.length <= i) {
+                        break;
+                    } else {
+                        console.log(outageRawData[i])
+                        outageResultData.push(outageRawData[i]);
+                    }
+                }
+                resolve(outageResultData);
+            }
+        });
+    });
+}
