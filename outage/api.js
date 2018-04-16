@@ -10,8 +10,14 @@ var app = express();
  * returns the orders that have a type set to SELL to the client
  */
 app.use('/orders/sell', (req, res) => {
-    page = req.query.page;
-    importOutage('SELL', req.query.page).then((data) => {
+    if (typeof (req.query.page) == "undefined") {
+        console.log(req.query.page)
+        page = 0
+    } else {
+        page = req.query.page;
+
+    }
+    importOutage('SELL', page).then((data) => {
 
         res.send(data);
     })
@@ -22,8 +28,14 @@ app.use('/orders/sell', (req, res) => {
  * returns the orders that have a type set to Buy to the client
  */
 app.use('/orders/buy', (req, res) => {
-    page = req.query.page;
-    importOutage('BUY', req.query.page).then((data) => {
+    if (typeof (req.query.page) == "undefined") {
+        console.log(req.query.page)
+        page = 0
+    } else {
+        page = req.query.page;
+
+    }
+    importOutage('BUY', page).then((data) => {
         res.send(data);
     })
 });
@@ -32,9 +44,14 @@ app.use('/orders/buy', (req, res) => {
  * return all the data, regardless of the type to the client
  */
 app.use('/orders/all', (req, res) => {
-    console.log(req.query.page)
-    page = req.query.page;
-    importOutage('ALL', req.query.page).then((data) => {
+    if (typeof (req.query.page) == "undefined") {
+        console.log(req.query.page)
+        page = 0
+    } else {
+        page = req.query.page;
+
+    }
+    importOutage('ALL', page).then((data) => {
 
         res.send(data);
     })
@@ -99,7 +116,7 @@ var importOutage = (type, page) => {
                 var i = page * 10;
                 var max = page * 10 + 10
                 for (i; i < max; i++) {
-                   // console.log(i)
+                    // console.log(i)
                     if (outageRawData.length <= i) {
                         break;
                     } else {
