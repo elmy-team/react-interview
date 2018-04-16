@@ -11,7 +11,6 @@ var app = express();
  */
 app.use('/orders/sell', (req, res) => {
     if (typeof (req.query.page) == "undefined") {
-        console.log(req.query.page)
         page = 0
     } else {
         page = req.query.page;
@@ -29,7 +28,6 @@ app.use('/orders/sell', (req, res) => {
  */
 app.use('/orders/buy', (req, res) => {
     if (typeof (req.query.page) == "undefined") {
-        console.log(req.query.page)
         page = 0
     } else {
         page = req.query.page;
@@ -45,7 +43,6 @@ app.use('/orders/buy', (req, res) => {
  */
 app.use('/orders/all', (req, res) => {
     if (typeof (req.query.page) == "undefined") {
-        console.log(req.query.page)
         page = 0
     } else {
         page = req.query.page;
