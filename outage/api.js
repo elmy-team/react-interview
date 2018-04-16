@@ -6,9 +6,10 @@ let fs = require('fs');
 var app = express();
 
 
-
+/**
+ * returns the orders that have a type set to SELL to the client
+ */
 app.use('/orders/sell', (req, res) => {
-    console.log(req.query.page)
     page = req.query.page;
     importOutage('SELL', req.query.page).then((data) => {
 
@@ -16,13 +17,20 @@ app.use('/orders/sell', (req, res) => {
     })
 
 });
+
+/**
+ * returns the orders that have a type set to Buy to the client
+ */
 app.use('/orders/buy', (req, res) => {
-    console.log(req.query.page)
     page = req.query.page;
     importOutage('BUY', req.query.page).then((data) => {
         res.send(data);
     })
 });
+
+/**
+ * return all the data, regardless of the type to the client
+ */
 app.use('/orders/all', (req, res) => {
     console.log(req.query.page)
     page = req.query.page;
@@ -53,6 +61,11 @@ const server = http.createServer(app);
 
 server.listen(port, () => console.log(`API running on localhost:${port}`));
 
+/**
+ * 
+ * @param {*type of value that we want to have it takes 3 values => BUY, SELL or ALL} type 
+ * @param {*The page number that the client want} page 
+ */
 var importOutage = (type, page) => {
     return new Promise(function (resolve, reject) {
         fs.readFile('../large-dataset.json', (err, data) => {
@@ -74,23 +87,23 @@ var importOutage = (type, page) => {
                 }
             })
             numberPages = outageRawData.length / 10;
-            console.log(numberPages)
-            console.log(Math.ceil(numberPages))
+            //console.log(numberPages)
+            //console.log(Math.ceil(numberPages))
 
             numberPages = Math.ceil(outageRawData.length / 10);
             var outageResultData = [];
             if (page >= numberPages) {
                 resolve({ Error: 'Number of pages Exceeded' })
             } else {
-                
+
                 var i = page * 10;
                 var max = page * 10 + 10
                 for (i; i < max; i++) {
-                    console.log(i)
+                   // console.log(i)
                     if (outageRawData.length <= i) {
                         break;
                     } else {
-                        console.log(outageRawData[i])
+                        //console.log(outageRawData[i])
                         outageResultData.push(outageRawData[i]);
                     }
                 }
