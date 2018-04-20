@@ -39,6 +39,9 @@ All pages returned by the API contain ten elements.
 The API can be started by running `npm start` from the api folder.
 Don't forget to run `npm install` before that.
 
+The API can be started by running `npm start` from the api folder.
+Don't forget to run `npm install` before that.
+ 
 ## Outages
 
 In the [api](api/) folder, you can find a small express app that emits every second an event through a websocket.
