@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Emits every second a new outage",
   "main": "ws.js",
+  "scripts": {
+    "start": "node api.js"
+  },
   "dependencies": {
     "express": "^4.16.3",
     "fs": "0.0.1-security",
