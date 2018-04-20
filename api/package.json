@@ -4,7 +4,8 @@
   "description": "Emits every second a new outage",
   "main": "ws.js",
   "scripts": {
-    "start": "node api.js"
+    "start": "node api.js",
+    "start-ws": "node ws.js"
   },
   "dependencies": {
     "express": "^4.16.3",

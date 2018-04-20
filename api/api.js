@@ -5,8 +5,6 @@ const http = require('http');
 let fs = require('fs');
 var app = express();
 
-
-
 /**
  * returns the orders that have the corresponding type
  */
@@ -44,9 +42,9 @@ const server = http.createServer(app);
 server.listen(port, () => console.log(`API running on localhost:${port}`));
 
 /**
- * 
- * @param {*type of value that we want to have it takes 3 values => BUY, SELL or ALL} type 
- * @param {*The page number that the client want} page 
+ *
+ * @param {*type of value that we want to have it takes 3 values => BUY, SELL or ALL} type
+ * @param {*The page number that the client want} page
  */
 var importOrderBook = (type, page) => {
     return new Promise(function (resolve, reject) {
@@ -68,9 +66,6 @@ var importOrderBook = (type, page) => {
                     return -1
                 }
             })
-            numberPages = orderBookRawData.length / 10;
-            //console.log(numberPages)
-            //console.log(Math.ceil(numberPages))
 
             numberPages = Math.ceil(orderBookRawData.length / 10);
             var orderBookResultData={}
@@ -79,15 +74,12 @@ var importOrderBook = (type, page) => {
             if (page >= numberPages) {
                 resolve({ Error: 'Number of pages Exceeded' })
             } else {
-
                 var i = page * 10;
                 var max = page * 10 + 10
                 for (i; i < max; i++) {
-                    // console.log(i)
                     if (orderBookRawData.length <= i) {
                         break;
                     } else {
-                        //console.log(orderBookRawData[i])
                         orderBookResultData['orders'].push(orderBookRawData[i]);
                     }
                 }

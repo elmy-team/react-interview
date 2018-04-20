@@ -6,14 +6,11 @@ Wireframe can be found at  [wireframe.cc](https://wireframe.cc/uR5ws6).
 
 ## How
 
-All your code must be pushed to a branch with your name. Whenever you start the test, please *push* a file name `times` containing the time you started the test.
-Whenever you have finished the test please also add the time in the times file.
+All your code must be pushed to a branch with your name.
 
 ## Back-end API
 
-You must develop an API (ideally using express) that sends trading orders. The data are stored in the [large-dataset.json](large-dataset.json) file.
-
-The API should expose one endpoint:
+This repository provides an API that returns trading orders (BUY / SELL / ALL). It only exposes one endpoint `/orders/:type`.
 
 ```
 GET /orders/TYPE?page=...
@@ -37,16 +34,16 @@ Where type in the URL can be :
   * ALL: return all the data, regardless of the type
 
 The `page` query string attribute starts from 0.
-All pages returned by the API must contain ten elements.
+All pages returned by the API contain ten elements.
 
-There is a second file [data.json](data.json) which is way smaller and that contains only few elements. This one can be used for testing / debugging purpose.
-
-
+The API can be started by running `npm start` from the api folder.
+Don't forget to run `npm install` before that.
+ 
 ## Outages
 
-In the [outage](outage/) folder, you can find a small express app that emits every second an event through a websocket.
+In the [api](api/) folder, you can find a small express app that emits every second an event through a websocket.
 In order to connect to the websocket:
- * Run node ws.js (in the outage folder)
+ * Run `npm run-script start-ws`  from the api folder
  * Connect to [ws://localhost:8080](ws://localhost:8080)
 
 Every second you should receive something like:
@@ -65,6 +62,5 @@ For each event, a new bootstrap [alert](https://getbootstrap.com/docs/4.0/compon
 
  - Bootstrap 4.x must be used for the UI
  - The HTML table should display 10 rows and add pagination in order to browse the data.
- - The data in the HTML table must be sorted by time (ASC).
  - The times in the test dataset are in UTC, whereas the times in the UI are in UTC + 1.
- - There is no constraint for the plot library (d3js preferred).
+ - There is no constraint for the plot library.
