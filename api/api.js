@@ -10,7 +10,7 @@ var app = express();
  */
 app.use('/orders/:type', (req, res) => {
     if (typeof (req.query.page) == "undefined") {
-        page = 0
+        page = -1
     } else {
         page = req.query.page;
     }
@@ -74,8 +74,8 @@ var importOrderBook = (type, page) => {
             if (page >= numberPages) {
                 resolve({ Error: 'Number of pages Exceeded' })
             } else {
-                var i = page * 10;
-                var max = page * 10 + 10
+                var i = page == -1 ? 0 : page * 10;
+                var max = page == -1 ? orderBookRawData.length : page * 10 + 10
                 for (i; i < max; i++) {
                     if (orderBookRawData.length <= i) {
                         break;

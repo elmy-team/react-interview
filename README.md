@@ -33,12 +33,12 @@ Where type in the URL can be :
   * BUY: only returns the orders that have a type set to BUY
   * ALL: return all the data, regardless of the type
 
-The `page` query string attribute starts from 0.
+The `page` query string attribute starts from 0. If you omit the `page` parameter, then all the data will be returned (that's what you need to call for the charts).
 All pages returned by the API contain ten elements.
 
 The API can be started by running `npm start` from the api folder.
 Don't forget to run `npm install` before that.
- 
+
 ## Outages
 
 In the [api](api/) folder, you can find a small express app that emits every second an event through a websocket.
@@ -61,6 +61,7 @@ For each event, a new bootstrap [alert](https://getbootstrap.com/docs/4.0/compon
 ## Constraints
 
  - Bootstrap 4.x must be used for the UI
+ - There is no link between the pagination on the table and the graphs underneath. The graph must display all the data per type (no pagination)
  - The HTML table should display 10 rows and add pagination in order to browse the data.
  - The times in the test dataset are in UTC, whereas the times in the UI are in UTC + 1.
  - There is no constraint for the plot library.
