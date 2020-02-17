@@ -1,4 +1,5 @@
 var express = require('express');
+const dayjs = require('dayjs');
 var path = require('path');
 var bodyParser = require('body-parser');
 const http = require('http');
@@ -29,10 +30,20 @@ app.use('/orders/:type', (req, res) => {
     }
 })
 
+app.get('/pricing', (req, res) => {
+  const { dateStart, dateEnd, basePrice, name } = req.query;
+
+  if(!dateStart || !dateEnd || !basePrice || !name) {
+    return res.status(400).send({ error: 'Missing or invalid query parameters' });
+  } else if (dayjs(dateEnd).diff(dateStart, 'day') <= 0) {
+    return res.status(400).send({ error: 'DateStart should be < to DateEnd' });
+  }
+  return res.status(200).send({ data: generatePricingTimeserie(dateStart, dateEnd, basePrice, name) })
+});
+
 app.use('/', (req, res) => {
     res.send("API WORKS")
 });
-
 
 const port = process.env.PORT || '3001';
 app.set('port', port);
@@ -88,3 +99,27 @@ var importOrderBook = (type, page) => {
         });
     });
 }
+
+const generatePricingTimeserie = (dateStart, dateEnd, baseValue, name) => {
+  const numberOfDays = dayjs(dateEnd).diff(dateStart, 'day');
+  const timeserie = [];
+  const volatility = .02;
+  let basePrice = +baseValue;
+
+  for(let i = 0; i < numberOfDays; i++) {
+    const rng = Math.random() - .5;
+    const changePercent = 2 * volatility * rng;
+    const changeAmount = basePrice * changePercent;
+    const estimatedPricing = basePrice + changeAmount;
+    basePrice = estimatedPricing;
+
+    timeserie.push({
+      date: dayjs(dateStart).add(i, 'day').format('YYYY-MM-DD'),
+      estimatedPricing,
+      maxPricing: estimatedPricing + (estimatedPricing * .3),
+      name,
+    })
+  }
+
+  return timeserie;
+};

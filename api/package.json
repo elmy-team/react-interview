@@ -8,6 +8,7 @@
     "start-ws": "node ws.js"
   },
   "dependencies": {
+    "dayjs": "^1.8.19",
     "express": "^4.16.3",
     "fs": "0.0.1-security",
     "moment": "^2.21.0",
